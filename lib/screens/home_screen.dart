@@ -232,7 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _selectedIndex = index;
           });
-          if (index == 4) {
+          if (index == 1) {
+            Navigator.pushNamed(context, '/explore');
+          } else if (index == 4) {
             Navigator.pushNamed(context, '/profile');
           }
         },
