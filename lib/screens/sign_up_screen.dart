@@ -1,213 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/sign_up_cubit.dart';
+import '../cubits/sign_up_state.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _usernameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 40),
-                Image.asset(
-                  'assets/images/carrot.png',
-                  width: 60,
-                  height: 60,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
+    return BlocProvider(
+      create: (_) => SignUpCubit(),
+      child: BlocListener<SignUpCubit, SignUpState>(
+        listener: (context, state) {
+          if (state.isSignUpSuccess) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          }
+        },
+        child: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage('assets/images/background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+                    Image.asset(
+                      'assets/images/carrot.png',
                       width: 60,
                       height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.orange.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Icon(
-                        Icons.eco,
-                        color: Colors.orange,
-                        size: 40,
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 30),
-                const Text(
-                  'Sign Up',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Enter your credentials to continue',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 30),
-
-                _buildTextField(
-                  controller: _firstNameController,
-                  label: 'First Name',
-                  hint: 'Harry',
-                ),
-                const SizedBox(height: 16),
-
-                _buildTextField(
-                  controller: _lastNameController,
-                  label: 'Last Name',
-                  hint: 'Potter',
-                ),
-                const SizedBox(height: 16),
-
-                _buildTextField(
-                  controller: _usernameController,
-                  label: 'Username',
-                  hint: 'HarryPotter',
-                ),
-                const SizedBox(height: 16),
-
-                _buildTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  hint: 'mshuvo97@gmail.com',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16),
-
-                _buildPasswordField(),
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    Checkbox(
-                      value: true,
-                      onChanged: (value) {},
-                      activeColor: const Color(0xFF53B175),
                     ),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'By continuing you agree to our ',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Terms of Service',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.withOpacity(0.8),
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            const TextSpan(text: ' and '),
-                            TextSpan(
-                              text: 'Privacy Policy',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.withOpacity(0.8),
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF53B175),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/login',
-                        (route) => false,
-                      );
-                    },
-                    child: const Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Sign Up',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Already have an account? ',
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/login',
-                          (route) => false,
-                        );
-                      },
-                      child: const Text(
-                        'Sign in',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF53B175),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                    const SizedBox(height: 30),
+                    _buildFirstNameField(),
+                    const SizedBox(height: 16),
+                    _buildLastNameField(),
+                    const SizedBox(height: 16),
+                    _buildUsernameField(),
+                    const SizedBox(height: 16),
+                    _buildEmailField(),
+                    const SizedBox(height: 16),
+                    _buildPasswordField(),
+                    const SizedBox(height: 20),
+                    _buildCheckbox(),
+                    const SizedBox(height: 20),
+                    _buildSignUpButton(),
+                    const SizedBox(height: 16),
+                    _buildSignInLink(context),
+                    const SizedBox(height: 30),
                   ],
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         ),
@@ -215,85 +76,214 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
+  Widget _buildFirstNameField() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (value) {
+            context.read<SignUpCubit>().updateFirstName(value);
+          },
           decoration: InputDecoration(
-            hintText: hint,
+            hintText: 'First Name',
             hintStyle: const TextStyle(color: Colors.grey),
             filled: true,
             fillColor: const Color(0xFFF2F3F2),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLastNameField() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (value) {
+            context.read<SignUpCubit>().updateLastName(value);
+          },
+          decoration: InputDecoration(
+            hintText: 'Last Name',
+            hintStyle: const TextStyle(color: Colors.grey),
+            filled: true,
+            fillColor: const Color(0xFFF2F3F2),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildUsernameField() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (value) {
+            context.read<SignUpCubit>().updateUsername(value);
+          },
+          decoration: InputDecoration(
+            hintText: 'Username',
+            hintStyle: const TextStyle(color: Colors.grey),
+            filled: true,
+            fillColor: const Color(0xFFF2F3F2),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEmailField() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              onChanged: (value) {
+                context.read<SignUpCubit>().updateEmail(value);
+              },
+              decoration: InputDecoration(
+                hintText: 'Email',
+                hintStyle: const TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: const Color(0xFFF2F3F2),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            if (state.emailError != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                state.emailError!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              onChanged: (value) {
+                context.read<SignUpCubit>().updatePassword(value);
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                hintStyle: const TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: const Color(0xFFF2F3F2),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            if (state.passwordError != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                state.passwordError!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildCheckbox() {
+    return Row(
+      children: [
+        Checkbox(
+          value: true,
+          onChanged: (value) {},
+          fillColor: MaterialStateProperty.all(const Color(0xFF53B175)),
+        ),
+        const Expanded(
+          child: Text(
+            'I agree with Terms & Conditions',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildPasswordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSignUpButton() {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: state.isFormValid && !state.isLoading
+                  ? const Color(0xFF53B175)
+                  : Colors.grey,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: state.isFormValid && !state.isLoading
+                ? () {
+                    context.read<SignUpCubit>().signUp();
+                  }
+                : null,
+            child: const Text(
+              'Sign Up',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSignInLink(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          'Password',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
+          'Already have an account? ',
+          style: TextStyle(color: Colors.grey),
         ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _passwordController,
-          obscureText: _obscurePassword,
-          decoration: InputDecoration(
-            hintText: '••••••••',
-            hintStyle: const TextStyle(color: Colors.grey),
-            filled: true,
-            fillColor: const Color(0xFFF2F3F2),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-              child: Icon(
-                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: Colors.grey,
-              ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
+          child: const Text(
+            'Sign in',
+            style: TextStyle(
+              color: Color(0xFF53B175),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

@@ -4,6 +4,7 @@ import 'screens/sign_up_screen.dart';
 import 'screens/product_detail_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/explore_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/product-detail': (context) => const ProductDetailScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/explore': (context) => const ExploreScreen(),
       },
     );
   }
