@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubits/home_cubit.dart';
 import '../cubits/home_state.dart';
 import 'loading_screen.dart';
+import 'product_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -251,7 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildProductCard(dynamic product) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product-detail');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(product: product),
+          ),
+        );
       },
       child: Container(
         width: 160,
@@ -364,7 +370,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildGridProductCard(BuildContext context, dynamic product) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product-detail');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(product: product),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -476,7 +487,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildGroceriesCard(dynamic product, Color bgColor) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product-detail');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(product: product),
+          ),
+        );
       },
       child: Container(
         width: 240,
