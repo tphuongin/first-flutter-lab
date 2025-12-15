@@ -98,7 +98,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Product Title and Price Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -140,7 +139,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    // Product Detail Section
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F3F2),
@@ -176,7 +174,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Nutritions Section
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F3F2),
@@ -212,7 +209,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Review Section
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F3F2),
@@ -278,7 +274,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Price and Quantity Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -368,7 +363,6 @@ class ProductDetailScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    // Add to Basket Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,

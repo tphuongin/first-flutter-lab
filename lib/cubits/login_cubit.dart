@@ -33,7 +33,6 @@ class LoginCubit extends Cubit<LoginState> {
   void login() {
     if (state.isFormValid) {
       emit(state.copyWith(isLoading: true));
-      // Simulate API call
       Future.delayed(const Duration(seconds: 2), () {
         emit(state.copyWith(isLoading: false, isLoginSuccess: true));
       });

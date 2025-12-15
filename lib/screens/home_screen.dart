@@ -43,16 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 12),
-            // Header with Location and Menu
             _buildHeader(),
             const SizedBox(height: 12),
-            // Search Bar
             _buildSearchBar(),
             const SizedBox(height: 16),
-            // Fresh Vegetables Banner
             _buildBannerSection('Fresh Vegetables', 'See all'),
             const SizedBox(height: 12),
-            // Exclusive Offer Section
             _buildSectionHeader('Exclusive Offer', 'See all'),
             const SizedBox(height: 8),
             SizedBox(
@@ -70,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            // Best Selling Section
             _buildSectionHeader('Best Selling', 'See all'),
             const SizedBox(height: 8),
             GridView.builder(
@@ -91,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const SizedBox(height: 16),
-            // Groceries Section
             _buildSectionHeader('Groceries', 'See all'),
             const SizedBox(height: 8),
             SizedBox(
@@ -105,15 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final product = state.products[index + 4];
                   final colors = [
-                    const Color(0xFFFFF5E6), // Beige for Pulses
-                    const Color(0xFFE8F5E9), // Light mint for Rice
+                    const Color(0xFFFFF5E6), 
+                    const Color(0xFFE8F5E9),
                   ];
                   return _buildGroceriesCard(product, colors[index]);
                 },
               ),
             ),
             const SizedBox(height: 16),
-            // Groceries Grid
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -269,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -295,13 +287,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // Product Info
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
                   Text(
                     product.name,
                     maxLines: 1,
@@ -313,7 +303,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Unit/Weight
                   Text(
                     product.unit,
                     maxLines: 1,
@@ -321,12 +310,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: const TextStyle(fontSize: 11, color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
-                  // Price and Add Button Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Price
                       Text(
                         '\$${product.price}',
                         style: const TextStyle(
@@ -335,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      // Add Button (Circle)
                       GestureDetector(
                         onTap: () {
                           context.read<HomeCubit>().increaseQuantity(
@@ -386,7 +372,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -412,13 +397,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // Product Info
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
                   Text(
                     product.name,
                     maxLines: 1,
@@ -430,7 +413,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Unit/Weight
                   Text(
                     product.unit,
                     maxLines: 1,
@@ -438,12 +420,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: const TextStyle(fontSize: 11, color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
-                  // Price and Add Button Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Price
                       Text(
                         '\$${product.price}',
                         style: const TextStyle(
@@ -452,7 +432,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      // Add Button (Circle)
                       GestureDetector(
                         onTap: () {
                           context.read<HomeCubit>().increaseQuantity(
@@ -504,7 +483,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
-              // Product Image
               Expanded(
                 child: Image.asset(
                   product.image,
@@ -518,7 +496,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Product Name
               Expanded(
                 child: Center(
                   child: Text(

@@ -3,34 +3,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubits/profile_cubit.dart';
 import '../cubits/profile_state.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  int _selectedIndex = 4;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProfileCubit(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Profile'),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-        ),
+        backgroundColor: Colors.white,
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildProfileCard(state),
-                    const SizedBox(height: 40),
-                    _buildMenuItems(context),
                     const SizedBox(height: 30),
+                    _buildProfileHeader(state),
+                    const SizedBox(height: 30),
+                    _buildMenuItems(),
+                    const SizedBox(height: 30),
+                    _buildDeleteButton(),
+                    const SizedBox(height: 16),
                     _buildLogoutButton(context),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -42,69 +47,99 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard(ProfileState state) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: AssetImage(state.user.avatar),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            state.user.name,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            state.user.email,
-            style: const TextStyle(color: Colors.grey, fontSize: 12),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFF2F3F2),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+  Widget _buildProfileHeader(ProfileState state) {
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 35,
+          backgroundImage: AssetImage(state.user.avatar),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      state.user.name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: const Icon(
+                      Icons.edit,
+                      color: Color(0xFF53B175),
+                      size: 20,
+                    ),
+                  ),
+                ],
               ),
-              onPressed: () {},
-              child: const Text('Edit', style: TextStyle(color: Colors.black)),
-            ),
+              const SizedBox(height: 4),
+              Text(
+                state.user.email,
+                style: const TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildMenuItems(BuildContext context) {
+  Widget _buildMenuItems() {
     final menuItems = [
-      'Orders',
-      'My Details',
-      'Delivery Address',
-      'Payment Methods',
-      'Promo Card',
-      'Notifications',
-      'Help',
-      'About',
+      {'icon': Icons.receipt_outlined, 'label': 'Orders'},
+      {'icon': Icons.person_outline, 'label': 'My Details'},
+      {'icon': Icons.location_on_outlined, 'label': 'Delivery Address'},
+      {'icon': Icons.payment_outlined, 'label': 'Payment Methods'},
+      {'icon': Icons.card_giftcard_outlined, 'label': 'Promo Cod'},
+      {'icon': Icons.notifications_outlined, 'label': 'Notifications'},
+      {'icon': Icons.help_outline, 'label': 'Help'},
+      {'icon': Icons.info_outline, 'label': 'About'},
     ];
 
     return Column(
       children: List.generate(menuItems.length, (index) {
+        final item = menuItems[index];
         return Column(
           children: [
-            ListTile(
-              title: Text(menuItems[index]),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-              contentPadding: EdgeInsets.zero,
+            GestureDetector(
               onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Row(
+                  children: [
+                    Icon(
+                      item['icon'] as IconData,
+                      color: Colors.black87,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        item['label'] as String,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 14,
+                    ),
+                  ],
+                ),
+              ),
             ),
             if (index < menuItems.length - 1)
               Divider(height: 1, color: Colors.grey.shade200),
@@ -114,27 +149,59 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildDeleteButton() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF53B175),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: () {},
+        child: const Text(
+          'Delete',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: const Color(0xFFF2F3F2),
+          side: const BorderSide(color: Color(0xFFF2F3F2)),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
         onPressed: () {
           _showLogoutDialog(context);
         },
-        child: const Text(
-          'Logout',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.logout, color: Color(0xFF53B175), size: 16),
+            const SizedBox(width: 8),
+            const Text(
+              'Log Out',
+              style: TextStyle(
+                color: Color(0xFF53B175),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -145,34 +212,84 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+        return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(20),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('No'),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.help_outline, size: 48, color: Colors.black54),
+                const SizedBox(height: 16),
+                const Text(
+                  'Are you sure you want to\nLogout?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF5B3FB8),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'NO',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF5B3FB8),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (route) => false,
+                          );
+                        },
+                        child: const Text(
+                          'YES',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login',
-                  (route) => false,
-                );
-              },
-              child: const Text(
-                'Yes',
-                style: TextStyle(color: Color(0xFF53B175)),
-              ),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -180,45 +297,55 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: 4,
+      currentIndex: _selectedIndex,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: const Color(0xFF53B175),
       unselectedItemColor: Colors.grey,
       onTap: (index) {
-        if (index == 0) {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-        } else if (index == 1) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/explore',
-            (route) => false,
-          );
+        setState(() {
+          _selectedIndex = index;
+        });
+        switch (index) {
+          case 0:
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+              (route) => false,
+            );
+            break;
+          case 1:
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/explore',
+              (route) => false,
+            );
+            break;
+          case 2:
+          case 3:
+            break;
+          case 4:
+            break;
         }
       },
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.shopping_bag_outlined),
+          label: 'Shop',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.explore_outlined),
-          activeIcon: Icon(Icons.explore),
           label: 'Explore',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_outline),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Favourite',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart_outlined),
-          activeIcon: Icon(Icons.shopping_cart),
           label: 'Cart',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
+          icon: Icon(Icons.favorite_border),
+          label: 'Favourite',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle_outlined),
           label: 'Account',
         ),
       ],

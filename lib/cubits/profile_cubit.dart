@@ -7,8 +7,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     : super(
         ProfileState(
           user: const User(
-            name: 'John Doe',
-            email: 'john@example.com',
+            name: 'Thu Phuong',
+            email: 'tp@example.com',
             avatar: 'assets/images/carrot.png',
           ),
         ),

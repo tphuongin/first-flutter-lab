@@ -45,7 +45,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   void signUp() {
     if (state.isFormValid) {
       emit(state.copyWith(isLoading: true));
-      // Simulate API call
       Future.delayed(const Duration(seconds: 2), () {
         emit(state.copyWith(isLoading: false, isSignUpSuccess: true));
       });
