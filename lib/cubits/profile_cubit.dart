@@ -9,7 +9,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           user: const User(
             name: 'John Doe',
             email: 'john@example.com',
-            avatar: 'assets/images/products/product1.png',
+            avatar: 'assets/images/carrot.png',
           ),
         ),
       );

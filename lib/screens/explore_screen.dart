@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/explore_cubit.dart';
+import '../cubits/explore_state.dart';
+import 'loading_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -10,152 +14,211 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   int _selectedIndex = 1;
 
-  final List<Map<String, String>> categories = [
-    {'name': 'Vegetables', 'image': 'assets/images/explore/vegetable.png'},
-    {'name': 'Oil & Ghee', 'image': 'assets/images/explore/oil.png'},
-    {'name': 'Meat', 'image': 'assets/images/explore/meat.png'},
-    {'name': 'Bakery', 'image': 'assets/images/explore/bakery.png'},
-    {'name': 'Dairy', 'image': 'assets/images/explore/dairy.png'},
-    {'name': 'Beverages', 'image': 'assets/images/explore/beverages.png'},
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Find Products'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              _buildSearchBar(),
-              const SizedBox(height: 30),
-              _buildCategoryGrid(),
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'Search',
-        prefixIcon: const Icon(Icons.search),
-        filled: true,
-        fillColor: const Color(0xFFF2F3F2),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategoryGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        return _buildCategoryCard(categories[index], index);
-      },
-    );
-  }
-
-  Widget _buildCategoryCard(Map<String, String> category, int index) {
-    bool isHighlighted = index == 1; // Oil & Ghee
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isHighlighted ? Colors.blue : Colors.grey.shade200,
-          width: isHighlighted ? 3 : 1,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            category['image']!,
-            height: 80,
-            width: 80,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            category['name']!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: const Color(0xFF53B175),
-      unselectedItemColor: Colors.grey,
-      onTap: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        if (index == 0) {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-        } else if (index == 4) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/profile',
-            (route) => false,
+    return BlocProvider(
+      create: (context) => ExploreCubit(),
+      child: BlocBuilder<ExploreCubit, ExploreState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 20.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Center(
+                      child: Text(
+                        'Find Products',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF2F3F2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search Store',
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 0.85,
+                          ),
+                      itemCount: state.categories.length,
+                      itemBuilder: (context, index) {
+                        final category = state.categories[index];
+                        return _buildCategoryCard(category);
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+                switch (index) {
+                  case 0:
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home',
+                      (route) => false,
+                    );
+                    break;
+                  case 1:
+                    break;
+                  case 2:
+                  case 3:
+                    break;
+                  case 4:
+                    Navigator.pushNamed(context, '/profile');
+                    break;
+                }
+              },
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.shopping_bag_outlined,
+                    color: _selectedIndex == 0
+                        ? const Color(0xFF53B175)
+                        : Colors.grey,
+                  ),
+                  label: 'Shop',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.explore_outlined,
+                    color: _selectedIndex == 1
+                        ? const Color(0xFF53B175)
+                        : Colors.grey,
+                  ),
+                  label: 'Explore',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: _selectedIndex == 2
+                        ? const Color(0xFF53B175)
+                        : Colors.grey,
+                  ),
+                  label: 'Cart',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.favorite_border,
+                    color: _selectedIndex == 3
+                        ? const Color(0xFF53B175)
+                        : Colors.grey,
+                  ),
+                  label: 'Favorites',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.account_circle_outlined,
+                    color: _selectedIndex == 4
+                        ? const Color(0xFF53B175)
+                        : Colors.grey,
+                  ),
+                  label: 'Account',
+                ),
+              ],
+            ),
           );
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore_outlined),
-          activeIcon: Icon(Icons.explore),
-          label: 'Explore',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_outline),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Favourite',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart_outlined),
-          activeIcon: Icon(Icons.shopping_cart),
-          label: 'Cart',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Account',
-        ),
-      ],
+        },
+      ),
     );
+  }
+
+  Widget _buildCategoryCard(Category category) {
+    return GestureDetector(
+      onTap: () {
+        _showCategoryLoading(context, category.name);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: category.color,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              category.image,
+              width: 80,
+              height: 80,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.image_not_supported,
+                  size: 80,
+                  color: Colors.grey.withOpacity(0.5),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            Text(
+              category.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCategoryLoading(BuildContext context, String categoryName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            LoadingScreen(message: 'Loading $categoryName...'),
+      ),
+    );
+
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pop(context);
+    });
   }
 }
