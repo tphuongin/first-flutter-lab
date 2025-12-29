@@ -1,15 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/product.dart';
-import 'home_state.dart';
+import 'package:myfirstflutter/cubits/cart_cubits/food_by_category_state.dart';
+import 'package:myfirstflutter/models/product.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(const HomeState(isLoading: true)) {
-    loadProducts();
-  }
+class FoodByCategoryCubit extends Cubit<FoodByCategoryState>{
+  FoodByCategoryCubit(): super(FoodByCategoryState(products: []));
 
-  void loadProducts() {
-    emit(state.copyWith(isLoading: true));
-    Future.delayed(const Duration(seconds: 2), () {
+  void loadProductByCategory(int categoryId){
       final products = [
         Product(
           id: 1,
@@ -92,39 +88,11 @@ class HomeCubit extends Cubit<HomeState> {
           unit: '1kg, Price',
         ),
       ];
-      emit(state.copyWith(products: products, isLoading: false));
-    });
+      final filtered = products.where((p) => p.categoryId == categoryId).toList();
+      emit(FoodByCategoryState(products: filtered));
   }
 
-  void toggleLike(int productId) {
-    final updatedProducts = state.products.map((product) {
-      if (product.id == productId) {
-        return product.copyWith(isLiked: !product.isLiked);
-      }
-      return product;
-    }).toList();
-    emit(state.copyWith(products: updatedProducts));
-  }
-
-  void increaseQuantity(int productId) {
-    final updatedProducts = state.products.map((product) {
-      if (product.id == productId) {
-        return product.copyWith(quantity: product.quantity + 1);
-      }
-      return product;
-    }).toList();
-    emit(state.copyWith(products: updatedProducts));
-  }
-
-  void decreaseQuantity(int productId) {
-    final updatedProducts = state.products.map((product) {
-      if (product.id == productId) {
-        if (product.quantity > 0) {
-          return product.copyWith(quantity: product.quantity - 1);
-        }
-      }
-      return product;
-    }).toList();
-    emit(state.copyWith(products: updatedProducts));
+  void selectProduct(Product product){
+    emit(state.copyWith(selectedProduct: product));
   }
 }

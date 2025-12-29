@@ -4,6 +4,7 @@ import '../cubits/home_cubit.dart';
 import '../cubits/home_state.dart';
 import 'loading_screen.dart';
 import 'product_detail_screen.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
             backgroundColor: Colors.white,
             body: _buildHomeContent(context, state),
-            bottomNavigationBar: _buildBottomNavigationBar(context),
+            bottomNavigationBar: CustomBottomNavigationBar(
+              currentIndex: _selectedIndex,
+            ),
           );
         },
       ),
@@ -99,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final product = state.products[index + 4];
                   final colors = [
-                    const Color(0xFFFFF5E6), 
+                    const Color(0xFFFFF5E6),
                     const Color(0xFFE8F5E9),
                   ];
                   return _buildGroceriesCard(product, colors[index]);
@@ -516,57 +519,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      onTap: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        if (index == 1) {
-          Navigator.pushNamed(context, '/explore');
-        } else if (index == 4) {
-          Navigator.pushNamed(context, '/profile');
-        }
-      },
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.shopping_bag_outlined,
-            color: _selectedIndex == 0 ? const Color(0xFF53B175) : Colors.grey,
-          ),
-          label: 'Shop',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.explore_outlined,
-            color: _selectedIndex == 1 ? const Color(0xFF53B175) : Colors.grey,
-          ),
-          label: 'Explore',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.shopping_cart_outlined,
-            color: _selectedIndex == 2 ? const Color(0xFF53B175) : Colors.grey,
-          ),
-          label: 'Cart',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.favorite_border,
-            color: _selectedIndex == 3 ? const Color(0xFF53B175) : Colors.grey,
-          ),
-          label: 'Favorites',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.account_circle_outlined,
-            color: _selectedIndex == 4 ? const Color(0xFF53B175) : Colors.grey,
-          ),
-          label: 'Account',
-        ),
-      ],
-    );
   }
-}
+

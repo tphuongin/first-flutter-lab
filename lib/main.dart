@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myfirstflutter/screens/cart_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/sign_up_screen.dart';
 import 'screens/home_screen.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/explore': (context) => const ExploreScreen(),
+        '/cart': (context) => const CartScreen()
       },
     );
   }

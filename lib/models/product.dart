@@ -2,6 +2,7 @@ class Product {
   final int id;
   final String name;
   final double price;
+  final int categoryId;
   final String image;
   final String detail;
   final int quantity;
@@ -13,6 +14,7 @@ class Product {
     required this.id,
     required this.name,
     required this.price,
+    required this.categoryId,
     required this.image,
     required this.detail,
     this.quantity = 0,
@@ -25,6 +27,7 @@ class Product {
     int? id,
     String? name,
     double? price,
+    int? categoryId,
     String? image,
     String? detail,
     int? quantity,
@@ -36,6 +39,7 @@ class Product {
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
+      categoryId: categoryId ?? this.categoryId,
       image: image ?? this.image,
       detail: detail ?? this.detail,
       quantity: quantity ?? this.quantity,
