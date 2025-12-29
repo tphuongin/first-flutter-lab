@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubits/explore_cubit.dart';
-import '../cubits/explore_state.dart';
+import 'package:myfirstflutter/cubits/category_cubit.dart';
+import 'package:myfirstflutter/cubits/category_state.dart';
+import 'package:myfirstflutter/models/category.dart';
 import 'loading_screen.dart';
+
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -17,8 +19,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExploreCubit(),
-      child: BlocBuilder<ExploreCubit, ExploreState>(
+      create: (context) => CategoryCubit(),
+      child: BlocBuilder<CategoryCubit, CategoryState>(
         builder: (context, state) {
           return Scaffold(
             backgroundColor: Colors.white,
